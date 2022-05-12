@@ -1,42 +1,49 @@
 import { Button, Grid, TextField } from "@mui/material";
 import axios from 'axios'
-import { useEffect } from "react";
+import { useState } from "react";
 
 
 const AddTodo = () => {
-    const [todoList, setTodoList] = useState([])
+    const [todo, setTodo] = useState({})
 
-    const handelChange = (event) => {
-        const { name, value } = event.target
-        setTodoList({ [name]: value })
+    const handleChange = (event) =>{
+        const {name,value} = event.target
+        setTodo({...todo,id: Math.random(),[name]:value})
+    } 
+
+    const handleSubmit = () => {
+        axios.post('http://localhost:8080/add-todo', todo)
+        .then(response => console.log(response.data))
     }
-
-    return (
+    
+    return(
         <>
             <Grid container spacing={2}>
-                <Grid item md={12} mx={24}>
-                    <TextField
-                        name="todoName"
-                        label="Todo Name"
-                        varient="filled"
-                        onChange={handelChange}
+                <Grid item lg={12} mx={24} >
+                    <TextField 
+                        name="todoName" 
+                        label="Todo Name" 
+                        variant="filled"
+                        onChange={handleChange}
                     />
                 </Grid>
-                <Grid item md={12} mx={24}>
+                <Grid item lg={12} mx={24} >
                     <TextField 
-                    name="todoDescripition"
-                    label="Todo Descripition"
-                    varient="filled"
-                    onChange={handelChange}
-
-                     />
+                        name="todoDescription" 
+                        label="Todo Description" 
+                        variant="filled" 
+                        onChange={handleChange}
+                    />
                 </Grid>
-                <Grid item md={12} mx={24}>
-                    <Button variant="contained">Add Todo</Button>
+                <Grid item lg={12} mx={29} >
+                    <Button 
+                        onClick = {handleSubmit}
+                        variant="contained"
+                    >Add Todo
+                    </Button>
                 </Grid>
-
-
             </Grid>
+        
         </>
     )
 }
